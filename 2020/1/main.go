@@ -5,32 +5,31 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"sort"
 	"strconv"
 )
 
 func main() {
-	inputData := make([]int, 0)
+	inputData := make(map[int]int, 0)
 	result := 0
-	readFile(&inputData)
+	readFile(inputData)
 
-	sort.Ints(inputData)
-	fmt.Printf("%#v\n", inputData)
+	const target = 2020
+
+	//sort.Ints(inputData)
+	//fmt.Printf("%#v\n", inputData)
 	for idx := range inputData {
-		//fmt.Println(idx)
-		for jdx := len(inputData) - 1; jdx > idx && inputData[jdx]+inputData[idx] >= 2020; jdx-- {
-			//fmt.Println(inputData[jdx], inputData[idx])
-			if inputData[jdx]+inputData[idx] == 2020 {
-				result = inputData[jdx] * inputData[idx]
-				fmt.Println(inputData[jdx], inputData[idx])
-			}
+		if _, ok := inputData[target-idx]; ok {
+			fmt.Println(idx)
+			result = idx * (target - idx)
+			break
 		}
+
 	}
 
 	fmt.Println("result:", result)
 }
 
-func readFile(inputData *[]int) {
+func readFile(inputData map[int]int) {
 	file, err := os.Open("input.txt")
 
 	if err != nil {
@@ -42,7 +41,7 @@ func readFile(inputData *[]int) {
 
 	for scanner.Scan() {
 		if number, err := strconv.Atoi(scanner.Text()); err == nil {
-			*inputData = append(*inputData, number)
+			inputData[number] = number
 		}
 
 	}
